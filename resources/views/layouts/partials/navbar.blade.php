@@ -357,9 +357,9 @@
                         }
                         if((isset($privillegsArray) && array_key_exists('manage_notification',$privillegsArray)) || $type=='super_admin'){
                     ?>
-                    <li class=" nav-item">
+                    <!-- <li class=" nav-item">
                         <a class="d-flex align-items-center" href=""><i data-feather="bell"></i><span class="menu-title text-truncate" data-i18n="Dashboards">Manage Notification</span></a>
-                    </li>
+                    </li> -->
                     <?php
                         }
                         if((isset($privillegsArray) && array_key_exists('manage_form',$privillegsArray)) || $type=='super_admin'){
