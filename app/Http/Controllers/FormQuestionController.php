@@ -24,8 +24,8 @@ class FormQuestionController extends Controller
         $data['paginationRoute']="formQuestion"; 
         $data['$querystring']=['formId'=>7];
     	$data['listData'] = FormQuestion::leftJoin('form_rules_values','form_rules_values.question_id','form_questions.id')
-                                            ->select('form_questions.*','form_rules_values.rule_id')
-                                            ->where('form_questions.form_id',$request->formId)->orderBy('form_questions.question_no')->paginate($pageLimit);
+                                            ->select('form_questions.*','form_rules_values.rule_id as ruleId')
+                                            ->where('form_questions.form_id',$request->formId)->groupBy('form_questions.id')->orderBy('form_questions.question_no')->paginate($pageLimit);
     	//print_r($data['listData']);exit;
         $data['formId']=$request->formId;
         return view('form.question.index',$data);
