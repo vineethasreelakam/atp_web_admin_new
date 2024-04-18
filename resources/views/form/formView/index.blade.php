@@ -77,7 +77,7 @@
                             </div>
                             <div class="card-body">
                                 <p class="card-text">
-                                 The admin possesses the capability to either edit existing sections or add new ones to the form  
+                                    Please choose the tournament you'd like to view form submissions for. 
                                 </p>
                             </div>
                             <form id="frm_delete" method="POST" action="">
@@ -91,6 +91,7 @@
                                             <th>#</th>
                                             <th>Title</th>
                                             <th>Category</th>
+                                            <th>Tournament Date</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -103,7 +104,7 @@
                                                     <td>{{(($listData->currentPage()-1)*$listData->perPage())+$key+1 }}</td>
                                                     <td>{{$row->title}}</td>
                                                     <td>{{$row->category}}</td>
-                                                    
+                                                    <td>{{date('d-m-Y',strtotime($row->tournament_date))}}</td>
                                                     <td>
                                                         <a class="btn btn-primary" href="{{route('formview.list',['id'=>$row->id])}}">
                                                             <i data-feather="eye" class="mr-50"></i>

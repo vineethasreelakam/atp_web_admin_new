@@ -75,7 +75,7 @@ class User extends Authenticatable implements JWTSubject
     }
      
     public function Forms(){
-        return $this->hasmany('App\Models\UserForm', 'user_id','id');
+        return $this->hasmany('App\Models\UserForm', 'user_id','id')->where('active',1);
     }
 
     public function Role(){

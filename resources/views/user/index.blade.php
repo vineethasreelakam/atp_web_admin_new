@@ -12,7 +12,7 @@
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
             <div class="content-header row">
-                <div class="content-header-left col-md-6 col-12 mb-2">
+                <div class="content-header-left col-md-5 col-12 mb-2">
                     <div class="row breadcrumbs-top">
                         <div class="col-12">
                             <h2 class="content-header-title float-left mb-0">User</h2>
@@ -28,13 +28,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 mb-1 form-group"style="float:right;">
+                <div class="col-md-4 mb-1 form-group"style="float:right;width:90%;">
                     <form class="" action="{{route('user')}}" method="GET">
-                    <input class="form-control" type="search" name="search" placeholder="Search..." style="width:65%;float:right;">
+                    <input class="form-control" type="search" name="search" placeholder="Name/Role" style="width:60%;float:right;">
                     <button class="ml-1 mr-0 btn btn-primary" style="float:right;" type="submit">Search</button>
                     </form>
                 </div>
-                <div class="col-md-2 mb-1"style="float:right;">
+                <div class="col-md-3 mb-1"style="float:right;">
                     <a href="{{route('user.create')}}">
                         <button class="dt-button btn btn-primary btn-add-record ml-2" tabindex="0" aria-controls="DataTables_Table_0" type="button" style="float:right;">
                             <span><i data-feather="plus-square"></i> Add New</span>
@@ -101,6 +101,22 @@
                                                             </button>
                                                             <div class="dropdown-menu">
                                                                 @php
+                                                                    if((isset($loginUserprivillegs) && array_key_exists('assign_tournament',$loginUserprivillegs)) || $type=='super_admin'){
+                                                                @endphp
+                                                                    <a class="dropdown-item" href="{{route('assign_tournament',['id'=>$row->id])}}">
+                                                                        <i data-feather="dribbble" class="mr-50"></i>
+                                                                        <span>Assign Tournament</span>
+                                                                    </a>
+                                                                @php
+                                                                    }
+                                                                    if((isset($loginUserprivillegs) && array_key_exists('transfer_user',$loginUserprivillegs)) || $type=='super_admin'){
+                                                                @endphp
+                                                                    <a class="dropdown-item" href="{{route('user.transfer',['id'=>$row->id])}}">
+                                                                        <i data-feather="check-circle" class="mr-50"></i>
+                                                                        <span>Transfer User</span>
+                                                                    </a>
+                                                                @php
+                                                                    }
                                                                     if((isset($loginUserprivillegs) && array_key_exists('user_edit',$loginUserprivillegs)) || $type=='super_admin'){
                                                                 @endphp
                                                                     <a class="dropdown-item" href="{{route('user.create',['id'=>$row->id])}}">
@@ -118,6 +134,16 @@
                                                                     <i data-feather="bar-chart-2" class="mr-50"></i>
                                                                     <span>{{$row->status==1 ? 'Suspend' : 'Activate'}}</span>
                                                                 </a>
+                                                                @php
+                                                                    if((isset($loginUserprivillegs) && array_key_exists('reset_password',$loginUserprivillegs)) || $type=='super_admin'){
+                                                                @endphp
+                                                                <a class="dropdown-item rst_psw" href="javascript:void(0);" data-url="{{route('UAreset_psw',['id'=>$row->id])}}">
+                                                                        <i data-feather="compass" class="mr-50"></i>
+                                                                        <span>Reset Password</span>
+                                                                </a>
+                                                                @php
+                                                                    }
+                                                                @endphp     
                                                             </div>
                                                         </div>
                                                     </td>
@@ -164,6 +190,26 @@
                 })
                 
             });
+
+            $(".rst_psw").click(function(){
+                var url=$(this).attr('data-url');
+
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reset password!'
+                }).then((result) => {
+                    if (result.value) {
+                        window.location.href =url;
+                    }
+                })
+                
+            });
+
         });
     </script>    
 @stop

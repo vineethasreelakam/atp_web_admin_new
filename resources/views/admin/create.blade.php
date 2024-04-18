@@ -291,9 +291,11 @@
                     $("#tournamentIds").empty();
                     var count=$('#tournaments option:selected').length;
 
-                    $('#tournaments option:selected').each(function() {
+                    $('#tournaments option:selected').each(function(index,value) {
                         if(count>1){
-                            $(this:last).prop('selected',false);
+                            if(index === 1) {
+                                $(this).prop('selected',false);
+                            }
                         }
                             var optionValue = $(this).val();
                             var userAccessId = $(this).attr('userAccessId');

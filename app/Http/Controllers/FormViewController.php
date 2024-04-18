@@ -55,12 +55,20 @@ class FormViewController extends Controller
         $input=$request->all();
         
         $tournamentId=$input['id'];
-        $user=User::join('user_form','users.id','user_form.user_id')->where(function($query) use ($tournamentId){  
+        /* $user=User::join('user_form','users.id','user_form.user_id')->where(function($query) use ($tournamentId){  
                                 $query->where('user_form.tournament_id',$tournamentId);
                             })
                             ->select('users.id as userId','users.name','users.admin','user_form.*')
                             ->groupBy('users.id')
+                            ->paginate($pageLimit); */
+        $user=User::join('user_form','users.id','user_form.user_id')->where(function($query) use ($tournamentId){  
+                                $query->where('user_form.tournament_id',$tournamentId);
+                            })
+                            ->leftJoin('role_master','role_master.id','users.role_id')
+                            ->select('users.id as userId','role_master.title','users.name','users.admin','user_form.*')
+                            ->groupBy('users.id')
                             ->paginate($pageLimit);
+
         $data['listData'] = $user;
         //print_r($data['listData']);exit;
         

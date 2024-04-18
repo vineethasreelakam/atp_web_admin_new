@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Auth;
+use Hash;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\Privillege;
@@ -94,9 +95,9 @@ class UserController extends Controller
             if(isset($input['tournaments'])){
                 foreach($input['tournaments'] as $tournamentVal){
                     $tournamentdata=[];
-                    if(isset($input['tournamentuserAccessId'][$tournamentVal])){
+                    /* if(isset($input['tournamentuserAccessId'][$tournamentVal])){
                         $tournamentdata['id']=$input['tournamentuserAccessId'][$tournamentVal];
-                    }
+                    } */
                     $tournamentdata['user_id']=$user->id;
                     $tournamentdata['privillege_id']=NULL;
                     $tournamentdata['tournament_id']=$tournamentVal;
@@ -184,6 +185,54 @@ class UserController extends Controller
         return redirect()->route('user')->with('message',$message);
     }
 
+    public function assign_tournament(Request $request)
+    {
+            $input=$request->all();
+            $data['tournaments']=Tournament::orderBy('category')->get();
+            $user=User::with('Forms','Tournaments')->find($input['id']);
+            //$data['roleMaster']=Role::where('id',$user->role_id)->first();
+            $data['formData']=$user;
+        return view('user.assign_tournament',$data);
+    }
+
+    public function change_tournament(Request $request)
+    {
+        $input=$request->all();
+        //print_r($input);exit;
+        $user=User::find($input['id']);
+        if($user->admin == 1){
+            $route="admin";
+        }
+        else{
+            $route="user";
+        }
+        UserAccess::where('user_id',$input['id'])->where('type','tournament')->update(['status'=>'0']);
+        UserForm::where('user_id',$input['id'])->update(['active'=>'0']);
+
+        $roleDetails=Role::with('Forms')->where('id',$user->role_id)->first();
+                //print_r($roleDetails->flatMap->Forms);exit;
+                if(isset($input['tournaments'])){
+                    foreach($input['tournaments'] as $tournamentVal){
+                        $data['user_id']=$input['id'];
+                        $data['tournament_id']=$tournamentVal;
+                        $data['type']="tournament";
+                        UserAccess::create($data);
+                        foreach($roleDetails->Forms as $val){
+                            $tournamentformdata['user_id']=$input['id'];
+                            $tournamentformdata['tournament_id']=$tournamentVal;
+                            $tournamentformdata['form_id']=$val->form_id;
+                            $tournamentformdata['status']="1";
+                            $tournamentformdata['active']="1";
+                            UserForm::create($tournamentformdata);
+                        }
+                    }
+                }
+
+
+        $message="Successfully Updated Tournament";
+        return redirect()->route($route)->with('message',$message);
+    }
+
     public function destroy(Request $request,$id)
     {
         $user=User::find($id);
@@ -219,7 +268,70 @@ class UserController extends Controller
      return substr(str_shuffle($str_result),
                         0, $length_of_string);
     }
-     
+
+
+    public function UAreset_psw(Request $request)
+    {   
+        $input=$request->all();
+        $user=User::find($input['id']);
+        $password=$this->random_strings(6);
+        $user->update(['password' => Hash::make($password)]);
+
+        $subject = "Your Password Reset Successfully";
+                $email_content = [
+                    'subject'       => $subject,
+                    'name'          => $user->name,
+                    'password'      => $password,
+                    'email'         => $user->email,
+                ];
+                $content = view('email.password', $email_content)->render();
+                $to_data = [
+                    'to_email'  => $user->email,
+                    'name'      => $user->name,
+                ];
+               // SendMail::sendemail($to_data, $subject, $content);
+                SendMail::sendemail($to_data, $subject, $content);
+
+
+        $message="Please check your mail for new password";
+        return redirect()->back()->with('message',$message);
+    }
+
+    public function user_transfer(Request $request)
+    { 
+        $input=$request->all();
+        
+        $user=User::find($input['id']);
+
+        if($user->admin == 1){
+            $type="admin";
+        }
+        else{
+            $type="user";
+        }
+        $data['formData']=$user;
+        $data['users']=User::where('type',$type)->get();
+        return view('user.transfer_user',$data);
+    }
+
+    public function user_transfer_store(Request $request)
+    { 
+        $input=$request->all();
+        //print_r($input);exit;
+        $user=User::find($input['id']);
+        $userAccessUpdate=UserAccess::where('user_id',$input['id'])->update(['user_id'=>$input['userId']]);
+        $userFormUpdate=UserForm::where('user_id',$input['id'])->where('active','1')->update(['user_id'=>$input['userId']]);
+        if($user->admin == 1){
+            $route="admin";
+        }
+        else{
+            $route="user";
+        }
+        $message="Successfully Transfered User";
+        return redirect()->route($route)->with('message',$message);
+    }
+
+    
     
      
 }

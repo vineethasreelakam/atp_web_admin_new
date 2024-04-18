@@ -234,12 +234,14 @@
                         name:"required",
                         email:"required",
                         role_id:"required",
+                        'tournaments[]':"required",
                     },
                     // In 'messages' user have to specify message as per rules
                     messages: {
                         name:"Please enter Name",
                         email:"Please enter Email",
                         role_id:"Please Select Role",
+                        'tournaments[]':"Please Select Tournaments",
                     }
                 });
                 $('option').mousedown(function(e) {
@@ -259,9 +261,11 @@
                     $("#tournamentIds").empty();
                     var count=$('#tournaments option:selected').length;
                     
-                    $('#tournaments option:selected').each(function() {
+                    $('#tournaments option:selected').each(function(index,value) {
                         if(count>1){
-                            $(this:last).prop('selected',false);
+                            if(index === 1) {
+                                $(this).prop('selected',false);
+                            }
                         }
                             var optionValue = $(this).val();
                             var userAccessId = $(this).attr('userAccessId');

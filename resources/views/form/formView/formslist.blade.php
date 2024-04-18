@@ -48,7 +48,7 @@
                             </div>
                             <div class="card-body">
                                 <p class="card-text">
-                                 The admin possesses the capability to either edit existing sections or add new ones to the form  
+                                    Please tap the "View" button to access the submitted form.  
                                 </p>
                             </div>
                             <form id="frm_delete" method="POST" action="">
@@ -59,10 +59,11 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>#</th>
                                             <th>Name</th>
+                                            <th>Role</th>
                                             <th>Allocated Form No</th>
                                             <th>Submitted Form No</th>
+                                            <th>Reviewed Form No</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -77,18 +78,22 @@
                                                 
                                                 @if($row->admin==1)
                                                     <?php
-                                                        $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->get();
+                                                        $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('active','1')->get();
                                                         $adminAllocatedCount=count($userFormDatas);
 
-                                                        $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','reviewed')->get();
-                                                        $adminSubmitesdCount=count($userFormDatas);
+                                                        $userFormsubmitedDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','completed')->where('active','1')->get();
+                                                        $adminSubmitedCount=count($userFormsubmitedDatas);
+
+                                                        $userFormReviewesDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','reviewed')->where('active','1')->get();
+                                                        $adminReviewedCount=count($userFormReviewesDatas);
                                                     ?>
                                                 
                                                     <tr>
-                                                        <td>{{(($listData->currentPage()-1)*$listData->perPage())+$key+1 }}</td>
                                                         <td>{{isset($row) ? $row->name : ''}}</td>
+                                                        <td>{{isset($row->title) ? $row->title : ''}}</td>
                                                         <td>{{$adminAllocatedCount}}</td>
-                                                        <td>{{$adminSubmitesdCount}}</td>
+                                                        <td>{{$adminSubmitedCount}}</td>
+                                                        <td>{{$adminReviewedCount}}</td>
                                                         
                                                         <td>
                                                             <a class="btn btn-primary" href="{{route('formview.details',['userId'=>$row->userId,'tournamentId'=>$row->tournament_id])}}">
@@ -106,18 +111,22 @@
                                                 @foreach($listData as $key=>$row)
                                                 @if($row->admin==0)
                                                   <?php
-                                                      $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->get();
+                                                      $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('active','1')->get();
                                                       $userAllocatedCount=count($userFormDatas);
 
-                                                      $userFormDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','reviewed')->get();
-                                                      $userSubmitesdCount=count($userFormDatas);
+                                                      $userFormSubmitedDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','completed')->where('active','1')->get();
+                                                      $userSubmitedCount=count($userFormSubmitedDatas);
+
+                                                      $userFormReviewedDatas=DB::table('user_form')->where('tournament_id',$row->tournament_id)->where('user_id',$row->userId)->where('status','reviewed')->where('active','1')->get();
+                                                      $userReviewedCount=count($userFormReviewedDatas);
                                                   ?>
                                               
                                                   <tr>
-                                                      <td>{{(($listData->currentPage()-1)*$listData->perPage())+$key+1 }}</td>
                                                       <td>{{isset($row) ? $row->name : ''}}</td>
+                                                      <td>{{isset($row->title) ? $row->title : ''}}</td>
                                                       <td>{{$userAllocatedCount}}</td>
-                                                      <td>{{$userSubmitesdCount}}</td>
+                                                      <td>{{$userSubmitedCount}}</td>
+                                                      <td>{{$userReviewedCount}}</td>
                                                       
                                                       <td>
                                                             <a class="btn btn-primary" href="{{route('formview.details',['userId'=>$row->userId,'tournamentId'=>$row->tournament_id])}}">

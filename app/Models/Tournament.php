@@ -10,7 +10,11 @@ class Tournament extends Model
     protected $fillable = [
         'title',
         'tournament_date',
+        'week',
+        'city',
         'category',
+        'surface',
+        'draws',
         'description',
         'status',
         'created_at',

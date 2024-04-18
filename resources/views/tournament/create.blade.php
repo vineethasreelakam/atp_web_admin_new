@@ -61,6 +61,20 @@
 
                                             <div class="col-md-8">
                                                 <div class="form-group">
+                                                    <label for="title">Week</label>
+                                                    <input type="text" class="form-control" placeholder="week" value="{{$formData->week}}" name="week" id="week" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="title">City</label>
+                                                    <input type="text" class="form-control" placeholder="City" value="{{$formData->city}}" name="city" id="city" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="form-group">
                                                     <label for="category">Category</label>
                                                     <select class="form-control" name="category" id="category">
                                                         <option value="">Select</option>
@@ -74,6 +88,20 @@
                                                         <option value="LAVER CUP" {{$formData->category=='LAVER CUP' ? 'selected' : ''}}>LAVER CUP</option>
                                                         <option value="ATP FINALS" {{$formData->category=='ATP FINALS' ? 'selected' : ''}}>ATP FINALS</option>
                                                     </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="title">Surface</label>
+                                                    <input type="text" class="form-control" placeholder="Surface" value="{{$formData->surface}}" name="surface" id="surface" />
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-8">
+                                                <div class="form-group">
+                                                    <label for="title">Draws</label>
+                                                    <input type="text" class="form-control" placeholder="Draws" value="{{$formData->draws}}" name="draws" id="draws" />
                                                 </div>
                                             </div>
 
@@ -119,15 +147,21 @@
                     // constraints for respective fields
                     rules: {
                         title:"required",
-                        
+                        week:"required",
+                        city:"required",
                         category:"required",
+                        surface:"required",
+                        draws:"required",
                         description:"required",
                     },
                     // In 'messages' user have to specify message as per rules
                     messages: {
                         title:"Please enter Title.",
-                        
+                        week:"Please enter Week.",
+                        city:"Please enter City.",
                         category:"Please enter Category.",
+                        surface:"Please enter Surface.",
+                        draws:"Please enter Draws.",
                         description:"Please enter Description.",
                     }
                 });

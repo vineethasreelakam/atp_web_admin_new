@@ -50,6 +50,13 @@ Route::group(['middleware' => ['auth:web']], function() {
     Route::post('user/create', [UserController::class, 'store'])->name('user.store');
     Route::delete('user/delete/{id}', [UserController::class, 'destroy'])->name('user.delete');
     Route::get('user/status/{id}', [UserController::class, 'changeStatus'])->name('user.status');
+    Route::get('assign_tournament', [UserController::class, 'assign_tournament'])->name('assign_tournament');
+    Route::post('assign_tournament', [UserController::class, 'change_tournament'])->name('change_tournament');
+    Route::get('UAreset_psw', [UserController::class, 'UAreset_psw'])->name('UAreset_psw');
+    Route::get('user/tranfer', [UserController::class, 'user_transfer'])->name('user.transfer');
+    Route::post('user/tranfer', [UserController::class, 'user_transfer_store'])->name('user.transferStore');
+
+
 
     Route::get('role', [RoleController::class, 'index'])->name('role');
     Route::get('role/create', [RoleController::class, 'create'])->name('role.create');
@@ -85,6 +92,8 @@ Route::group(['middleware' => ['auth:web']], function() {
     Route::get('formview', [FormViewController::class, 'index'])->name('formview');
     Route::get('formview/list', [FormViewController::class, 'formslist'])->name('formview.list');
     Route::get('formview/details', [FormViewController::class, 'formsDetails'])->name('formview.details');
+
+
 
 
 });

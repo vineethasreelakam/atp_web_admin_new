@@ -84,6 +84,7 @@
                                             <th>#</th>
                                             <th>Title</th>
                                             <th>Category</th>
+                                            <th>Tournament Date</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -96,6 +97,7 @@
                                                     <td>{{(($listData->currentPage()-1)*$listData->perPage())+$key+1 }}</td>
                                                     <td>{{$row->title}}</td>
                                                     <td>{{$row->category}}</td>
+                                                    <td>{{date('d-m-Y',strtotime($row->tournament_date))}}</td>
                                                     <td>
                                                         <div class="dropdown">
                                                             <button type="button" class="btn btn-sm dropdown-toggle hide-arrow" data-toggle="dropdown">

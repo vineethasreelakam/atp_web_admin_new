@@ -59,7 +59,11 @@ class TournamentController extends Controller
             $tournament=Tournament::find($input['id']);
             $tournament->title=$input['title'];
             $tournament->tournament_date=date('Y-m-d',strtotime($input['tournament_date']));
+            $tournament->week=$input['week'];
+            $tournament->city=$input['city'];
             $tournament->category=$input['category'];
+            $tournament->surface=$input['surface'];
+            $tournament->draws=$input['draws'];
             $tournament->description=$input['description'];
             $tournament->update();
 

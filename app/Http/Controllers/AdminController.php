@@ -81,10 +81,10 @@ class AdminController extends Controller
 
             if(isset($input['tournaments'])){
                 foreach($input['tournaments'] as $tournamentVal){
-                    $tournamentdata=[];
-                    if(isset($input['tournamentuserAccessId']) && isset($input['tournamentuserAccessId'][$tournamentVal])){
+                     $tournamentdata=[];
+                   /* if(isset($input['tournamentuserAccessId']) && isset($input['tournamentuserAccessId'][$tournamentVal])){
                         $tournamentdata['id']=$input['tournamentuserAccessId'][$tournamentVal];
-                    }
+                    } */
                     $tournamentdata['user_id']=$user->id;
                     $tournamentdata['privillege_id']=NULL;
                     $tournamentdata['tournament_id']=$tournamentVal;
